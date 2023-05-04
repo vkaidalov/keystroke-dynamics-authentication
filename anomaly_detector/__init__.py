@@ -5,3 +5,4 @@ from anomaly_detector.mahalanobis import MahalanobisAnomalyDetector
 from anomaly_detector.manhattan import ManhattanAnomalyDetector
 from anomaly_detector.manhattan_scaled import ManhattanScaledAnomalyDetector
 from anomaly_detector.one_class_svm import OneClassSvmAnomalyDetector
+from anomaly_detector.outlier_count import OutlierCountAnomalyDetector
