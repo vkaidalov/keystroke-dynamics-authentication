@@ -1,5 +1,6 @@
 .idea/
 output/
+app_state.pkl
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
