@@ -1,9 +1,10 @@
 import abc
-
 import pandas as pd
 
 
-class AbstractAnomalyDetector(metaclass=abc.ABCMeta):
+class AbstractAnomalyDetector(
+    metaclass=abc.ABCMeta
+):
     @abc.abstractmethod
     def train(self, train_data: pd.DataFrame) -> None:
         """
@@ -20,7 +21,7 @@ class AbstractAnomalyDetector(metaclass=abc.ABCMeta):
         Calculate anomaly scores for each sample of the provided dataset.
         The detector must be already trained before calling this method.
         :param test_data: Each row must have the same number of features as
-        the test dataset's rows.
+        the train dataset's rows.
         :return: A vector of scores for each given sample. Each score value is
         implementation-specific and a threshold value must be chosen respectively.
         """

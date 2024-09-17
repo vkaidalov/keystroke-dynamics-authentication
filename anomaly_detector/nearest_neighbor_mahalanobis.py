@@ -5,7 +5,9 @@ from scipy.spatial.distance import mahalanobis
 from anomaly_detector import AbstractAnomalyDetector
 
 
-class NearestNeighborMahalanobisAnomalyDetector(AbstractAnomalyDetector):
+class NearestNeighborMahalanobisAnomalyDetector(
+    AbstractAnomalyDetector
+):
     def __init__(self):
         self._is_trained: bool = False
         self._train_data: pd.DataFrame = pd.DataFrame()
