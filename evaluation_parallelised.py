@@ -1,3 +1,4 @@
+import concurrent.futures
 import os
 import argparse
 import pickle
@@ -114,13 +115,15 @@ stats = []
 start_time = datetime.now()
 print(f"start_time: {start_time}")
 
-for training_data_size in [
-    # 5
-    # 100
-    *range(5, 101, 5),
-    # *range(60, 101, 10),
-    # *range(120, 201, 20)
-]:
+# for training_data_size in [
+#     # 5
+#     # 100
+#     *range(5, 101, 5),
+#     # *range(60, 101, 10),
+#     # *range(120, 201, 20)
+# ]:
+def process_training_data(training_data_size, detector_dir_path, subject_ids, samples, common_pos_test_data,
+                              feature_columns_slice, use_sliding_window, detector_class):
     print(f'training_data_size: {training_data_size}')
     iteration_start_time = datetime.now()
     print(f'iteration_start_time: {iteration_start_time}')
@@ -131,7 +134,7 @@ for training_data_size in [
     os.makedirs(training_size_dir_path, exist_ok=True)
 
     for subject_id in subject_ids:
-        print(subject_id, end=' ', flush=True)
+        print(f'{training_data_size}:{subject_id}', end=' ', flush=True)
         curr_subject_samples = samples[samples['subject'] == subject_id]
 
         # first 5 password repetitions from each of the remaining 50 users, 250 in total
@@ -257,10 +260,34 @@ for training_data_size in [
         'zmfar_std': np.std(zero_miss_false_alarm_rates)
     }
     print(new_stats_dict)
-    stats.append(new_stats_dict)
+    # stats.append(new_stats_dict)
     iteration_end_time = datetime.now()
     print(f'iteration_end_time: {iteration_end_time}')
     print(f'Elapsed time: {iteration_end_time - iteration_start_time}')
+    return new_stats_dict
+
+training_data_sizes = [*range(40, 101, 5)]
+
+with concurrent.futures.ProcessPoolExecutor(max_workers=6) as executor:
+    # Submit all tasks to the pool
+    futures = [
+        executor.submit(
+            process_training_data,
+            training_data_size,
+            detector_dir_path,
+            subject_ids,
+            samples,
+            common_pos_test_data,
+            feature_columns_slice,
+            use_sliding_window,
+            detector_class
+        )
+        for training_data_size in training_data_sizes
+    ]
+
+    # Collect the results as they complete
+    for future in concurrent.futures.as_completed(futures):
+        stats.append(future.result())
 
 stats = pd.DataFrame(stats)
 stats.to_csv(f'{detector_dir_path}/stats.csv', index=False)
