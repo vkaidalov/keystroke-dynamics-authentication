@@ -2,10 +2,13 @@ name: keystroke-dynamics-authentication
 channels:
   - conda-forge
 dependencies:
-  - matplotlib=3
-  - numpy=1
-  - jupyterlab=3
-  - ipywidgets=8
-  - python=3.11
-  - scikit-learn=1
-  - pandas=2
+  - matplotlib=3.*
+  - numpy=2.*
+  - jupyterlab=4.*
+  - ipywidgets=8.*
+  - python=3.14
+  - scikit-learn=1.*
+  - pandas=3.*
+  - voila=0.*
+  - ipyevents=2.*
+  - scipy=1.*
